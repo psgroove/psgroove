@@ -1,0 +1,3 @@
+[submodule "lufa-lib"]
+	path = lufa-lib
+	url = git://github.com/psgroove/lufa-lib
