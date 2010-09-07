@@ -113,6 +113,25 @@ Notes
 A programmed dongle won't enumerate properly on a PC, so don't worry
 about that.
 
-**This software is not intended to enable piracy, and such features
-have been disabled.  This software is intended to allow the execution
-of unsigned third-party apps and games on the PS3.**
+This branch has a modified payload that adds peek and poke syscalls 
+to the lv2 kernel. A userspace application can use these syscalls to 
+dump out the entire memory space of the kernel, or patch the kernel
+as it is running.  
+
+Unfortunately, because the free toolchain/sdk is not ready, we can't
+distribute an application to do the dumping, so you will have to make
+your own.
+
+The lv2 kernel starts at 0x8000000000000000
+
+Peek
+----
+ * Syscall 6.
+ * r3 is a 64 bit address to read
+ * A 64 bit value will be returned in r3
+
+Poke
+----
+ * Syscall 7.
+ * r4 is a 64 bit value
+ * r3 is the address to write that value to
