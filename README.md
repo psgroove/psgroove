@@ -64,6 +64,12 @@ AT90USBKEY / AT90USBKEY2:
     BOARD = USBKEY
     F_CLOCK = 8000000
 
+Minimus AVR USB:
+
+    MCU = at90usb162
+    BOARD = USER
+    F_CLOCK = 16000000
+
 Board-specific notes
 --------------------
 Teensy boards only have one LED, so it will turn off when the exploit
