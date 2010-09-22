@@ -67,7 +67,7 @@ AT90USBKEY / AT90USBKEY2:
 Minimus AVR USB:
 
     MCU = at90usb162
-    BOARD = USER
+    BOARD = TEENSY
     F_CLOCK = 16000000
 
 Board-specific notes
