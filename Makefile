@@ -59,14 +59,16 @@
 #----------------------------------------------------------------------------
 
 
+FIRMWARE = FIRMWARE_3_15
+
 # MCU name
-MCU = at90usb1286
+MCU = at90usb1287
 
 
 # Target board (see library "Board Types" documentation, NONE for projects not requiring
 # LUFA board drivers). If USER is selected, put custom board drivers in a directory called 
 # "Board" inside the application directory.
-BOARD  = TEENSY
+BOARD  = AT90USBKEY
 
 
 # Processor frequency.
@@ -178,6 +180,8 @@ CSTANDARD = -std=c99
 CDEFS  = -DF_CPU=$(F_CPU)UL
 CDEFS += -DF_CLOCK=$(F_CLOCK)UL
 CDEFS += -DBOARD=BOARD_$(BOARD)
+CDEFS += -D$(FIRMWARE)
+CDEFS += -DUSE_JIG
 CDEFS += $(LUFA_OPTS)
 
 
