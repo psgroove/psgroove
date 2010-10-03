@@ -32,11 +32,11 @@
 
 // Teensy board only has the first LED, so it will turn off when 
 // exploit succeeds.
-#define RED	(LEDS_LED1)
+#define RED		(LEDS_LED1)
 #define GREEN	(LEDS_LED2)
 #define BOTH	(RED|GREEN)
 #define NONE	(LEDS_NO_LEDS)
-#define LED(x) LEDs_SetAllLEDs(x)
+#define LED(x)	LEDs_SetAllLEDs(x)
 
 #define PORT_EMPTY 0x0100   /* powered only */
 #define PORT_FULL 0x0103    /* connected, enabled, powered, full-speed */
@@ -456,7 +456,7 @@ uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
 					Size    = sizeof(port1_short_config_descriptor);
 				} else {
 					Address = (void *) port1_config_descriptor;
-					Size    = sizeof(port1_config_descriptor);
+					Size    = PORT1_DESC_LEN;
 				}
 				if (DescriptorNumber == 3 && wLength > 8) {
 					state = p1_ready;
@@ -474,7 +474,7 @@ uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
 		case 3:
 			// 2 configurations are the same
 			Address = (void *) port3_config_descriptor;
-			Size    = sizeof(port3_config_descriptor);
+			Size    = PORT3_DESC_LEN;
 			if (DescriptorNumber == 1 && wLength > 8) {
 				state = p3_ready;
 				expire = 10;
