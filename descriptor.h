@@ -1,5 +1,4 @@
 
-typedef uint8_t u8;
 #include "PL3/shellcode_egghunt.h"
 #include "PL3/default_payload_3_41.h"
 #include "PL3/default_payload_3_15.h"
@@ -83,7 +82,7 @@ const uint8_t PROGMEM jig_response[64] = {
 	SHELLCODE_PTR,
 	SHELLCODE_ADDRESS,
 	RTOC_TABLE,
-	default_shellcode_macro
+	default_shellcode_macro,
 };
 
 const uint8_t PROGMEM HUB_Device_Descriptor[] = {
@@ -128,7 +127,7 @@ const uint8_t PROGMEM port1_config_descriptor[] = {
 	SHELLCODE_ADDRESS,
 	RTOC_TABLE,
 #endif
-	default_payload_macro
+	default_payload_macro,
 };
 
 const uint8_t PROGMEM port2_device_descriptor[] = {
