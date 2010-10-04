@@ -59,7 +59,8 @@
 #----------------------------------------------------------------------------
 
 
-FIRMWARE = FIRMWARE_3_15
+FIRMWARE_VERSION = 3_15
+USE_JIG = 1
 
 # MCU name
 MCU = at90usb1287
@@ -111,6 +112,7 @@ TARGET = psgroove
 #     To put object files in current directory, use a dot (.), do NOT make
 #     this an empty or blank macro!
 OBJDIR = .
+
 
 
 # Path to the LUFA library
@@ -180,8 +182,10 @@ CSTANDARD = -std=c99
 CDEFS  = -DF_CPU=$(F_CPU)UL
 CDEFS += -DF_CLOCK=$(F_CLOCK)UL
 CDEFS += -DBOARD=BOARD_$(BOARD)
-CDEFS += -D$(FIRMWARE)
+CDEFS += -DFIRMWARE_$(FIRMWARE_VERSION)
+#if USE_JIG
 CDEFS += -DUSE_JIG
+#endif
 CDEFS += $(LUFA_OPTS)
 
 
@@ -677,6 +681,7 @@ clean: begin clean_list end
 clean_list :
 	@echo
 	@echo $(MSG_CLEANING)
+	$(MAKE) -C PL3/ clean
 	$(REMOVE) $(TARGET).hex
 	$(REMOVE) $(TARGET).eep
 	$(REMOVE) $(TARGET).cof
@@ -707,8 +712,16 @@ $(shell mkdir $(OBJDIR) 2>/dev/null)
 -include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 
 
+PL3:
+	$(MAKE) -C PL3
+
+# Explicitly lay out these payload dependencies so that PL3 can be built first
+descriptor.h: PL3
+psgroove.c: descriptor.h
+
+
 # Listing of phony targets.
 .PHONY : all begin finish end sizebefore sizeafter gccversion \
 build elf hex eep lss sym coff extcoff doxygen clean          \
 clean_list clean_doxygen program dfu flip flip-ee dfu-ee      \
-debug gdb-config
+debug gdb-config PL3
