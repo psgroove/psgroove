@@ -5,6 +5,12 @@ teensypp2=3
 at90usbkey=4
 minimus1=5
 minimus32=100
+blackcat=6
+xplain=7
+olimex=8
+usbtinymkii=9
+bentio=10
+openkubus=11
 
 mcu[$teensy1]=at90usb162
 board[$teensy1]=TEENSY
@@ -41,11 +47,42 @@ board[$minimus32]=USBKEY
 mhz_clock[$minimus32]=16
 name[$minimus32]="Minimus 32"
 
+mcu[$blackcat]=at90usb162
+board[$blackcat]=BLACKCAT
+mhz_clock[$blackcat]=16
+name[$blackcat]="Blackcat"
+
+mcu[$xplain]=at90usb1287
+board[$xplain]=XPLAIN
+mhz_clock[$xplain]=8
+name[$xplain]="XPLAIN"
+
+mcu[$olimex]=at90usb162
+board[$olimex]=OLIMEX
+mhz_clock[$olimex]=16
+name[$olimex]="Olimex"
+
+mcu[$usbtinymkii]=at90usb162
+board[$usbtinymkii]=USBTINYMKII
+mhz_clock[$usbtinymkii]=16
+name[$usbtinymkii]="USBTINYMKII"
+
+mcu[$bentio]=at90usb162
+board[$bentio]=BENTIO
+mhz_clock[$bentio]=16
+name[$bentio]="Bentio"
+
+mcu[$openkubus]=atmega16u4
+board[$openkubus]=USBKEY
+mhz_clock[$openkubus]=8
+name[$openkubus]="OpenKubus"
+
+
 rm -rf psgroove_hex/
 mkdir psgroove_hex
 make clean
 
-for target in {0..5}; do
+for target in {0..11}; do
   for firmware in 3.01 3.10 3.15 3.41 ; do
     firmware=${firmware/./_}
     low_board=`echo ${board[$target]} | awk '{print tolower($0)}'`

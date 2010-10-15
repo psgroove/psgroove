@@ -63,13 +63,13 @@ FIRMWARE_VERSION = 3_41
 USE_JIG = 1
 
 # MCU name
-MCU = at90usb1287
+#MCU = at90usb1287
 
 
 # Target board (see library "Board Types" documentation, NONE for projects not requiring
 # LUFA board drivers). If USER is selected, put custom board drivers in a directory called 
 # "Board" inside the application directory.
-BOARD  = USBKEY
+#BOARD  = USBKEY
 
 
 # Processor frequency.
@@ -83,7 +83,74 @@ BOARD  = USBKEY
 #     does not *change* the processor frequency - it should merely be updated to
 #     reflect the processor speed set externally so that the code can use accurate
 #     software delays.
-F_CPU = 8000000
+#F_CPU = 8000000
+
+## *** Select your board *** ##
+
+## Teensy 1.0
+#MCU = at90usb162
+#BOARD = TEENSY
+#F_CPU = 16000000
+
+## Teensy++ 1.0
+#MCU = at90usb646
+#BOARD = TEENSY
+#F_CPU = 16000000
+
+## Teensy 2.0
+#MCU = atmega32u4
+#BOARD = TEENSY
+#F_CPU = 16000000
+
+# Teensy++ 2.0
+#MCU = at90usb1286
+#BOARD  = TEENSY
+#F_CPU = 16000000
+
+## AT90USBKEY / AT90USBKEY2
+#MCU = at90usb1287
+#BOARD = USBKEY
+#F_CPU = 8000000
+
+## Minimus v1
+#MCU = at90usb162
+#BOARD = MINUMUS
+#F_CPU = 16000000
+
+## Minimus 32 (MCU not currently supported by avr-gcc)
+#MCU = atmega32u2
+#BOARD = USBKEY
+#F_CPU = 16000000
+
+## Blackcat
+#MCU = at90usb162
+#BOARD = BLACKCAT
+#F_CPU = 16000000
+
+## Xplain
+#MCU = at90usb1287
+#BOARD = XPLAIN
+#F_CPU = 8000000
+
+## Olimex
+#MCU = at90usb162
+#BOARD = OLIMEX
+#F_CPU = 8000000
+
+## USBTINYMKII
+#MCU = at90usb162
+#BOARD = USBTINYMKII
+#F_CPU = 16000000
+
+## Benito
+#MCU = at90usb162
+#BOARD = BENITO
+#F_CPU = 16000000
+
+## OpenKubus
+#MCU = atmega16u4
+#BOARD = USBKEY
+#F_CPU = 8000000
 
 
 # Input clock frequency.
