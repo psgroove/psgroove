@@ -13,8 +13,7 @@
 #elif defined (FIRMWARE_3_01)
 #define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x32, 0x06, 0x40
 #else
-#error "You must specify the target firmware." \
-  " define a supported FIRMWARE_X_YZ in config.h and recompile."
+#error You must specify the target firmware. Define a supported FIRMWARE_X_YZ in Makefile
 #endif /* FIRMWARE_X_YZ */
 
 
