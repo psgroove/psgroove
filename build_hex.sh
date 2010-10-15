@@ -4,6 +4,7 @@ teensy2=2
 teensypp2=3
 at90usbkey=4
 minimus1=5
+minimus32=100
 
 mcu[$teensy1]=at90usb162
 board[$teensy1]=TEENSY
@@ -34,6 +35,11 @@ mcu[$minimus1]=at90usb162
 board[$minimus1]=USBKEY
 mhz_clock[$minimus1]=16
 name[$minimus1]="Minimus v1"
+
+mcu[$minimus32]=atmega32u2
+board[$minimus32]=USBKEY
+mhz_clock[$minimus32]=16
+name[$minimus32]="Minimus 32"
 
 rm -rf hex/
 mkdir hex
