@@ -448,7 +448,7 @@ uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
 		case 3:
 			// 2 configurations are the same
 			Address = (void *) port3_config_descriptor;
-			Size    = PORT3_DESC_LEN;
+			Size    = sizeof(port3_config_descriptor);
 			if (DescriptorNumber == 1 && wLength > 8) {
 				state = p3_ready;
 				expire = 10;
