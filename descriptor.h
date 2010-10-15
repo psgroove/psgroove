@@ -24,27 +24,24 @@
 #include "PL3/default_payload_3_41.h"
 #define default_payload default_payload_3_41
 #define default_payload_macro default_payload_3_41_macro
-#define SHELLCODE_ADDR_HIGH	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee
-#define SHELLCODE_ADDR_LOW	0x70
+#define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x70
 #elif defined (FIRMWARE_3_15)
 #include "PL3/default_payload_3_15.h"
 #define default_payload default_payload_3_15
 #define default_payload_macro default_payload_3_15_macro
-#define SHELLCODE_ADDR_HIGH	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde
-#define SHELLCODE_ADDR_LOW	0x30
+#define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x30
 #elif defined (FIRMWARE_3_01)
 #include "PL3/default_payload_3_01.h"
 #define default_payload default_payload_3_01
 #define default_payload_macro default_payload_3_01_macro
-#define SHELLCODE_ADDR_HIGH	0x80, 0x00, 0x00, 0x00, 0x00, 0x3B, 0xFB
-#define SHELLCODE_ADDR_LOW	0xC8
+#define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3B, 0xFB, 0xC8
 #endif /* FIRMWARE_X_YZ */
 
 
 #define SHELLCODE_PAGE		0x80, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00
-#define SHELLCODE_DESTINATION	SHELLCODE_ADDR_HIGH, SHELLCODE_ADDR_LOW
-#define SHELLCODE_PTR 		SHELLCODE_ADDR_HIGH, SHELLCODE_ADDR_LOW + 0x08
-#define SHELLCODE_ADDRESS	SHELLCODE_ADDR_HIGH, SHELLCODE_ADDR_LOW + 0x18
+#define SHELLCODE_DESTINATION	SHELLCODE_ADDR_BASE
+#define SHELLCODE_PTR 		SHELLCODE_ADDR_BASE + 0x08
+#define SHELLCODE_ADDRESS	SHELLCODE_ADDR_BASE + 0x18
 
 #define PORT1_NUM_CONFIGS	4
 
@@ -56,15 +53,12 @@
 #define default_payload dump_lv2
 #define default_payload_macro dump_lv2_macro
 
-#define SHELLCODE_ADDR_HIGH	0x80, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x00
-//#define SHELLCODE_ADDR_HIGH	0x80, 0x00, 0x00, 0x00, 0x00, 0x5B, 0x00
-//#define SHELLCODE_ADDR_HIGH	0x80, 0x00, 0x00, 0x00, 0x00, 0x45, 0x00
-#define SHELLCODE_ADDR_LOW	0x00
+#define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x4E, 0x00, 0x00
 
-#define SHELLCODE_PAGE		SHELLCODE_ADDR_HIGH, SHELLCODE_ADDR_LOW
-#define SHELLCODE_DESTINATION	SHELLCODE_ADDR_HIGH, SHELLCODE_ADDR_LOW + 0x20
-#define SHELLCODE_PTR 		SHELLCODE_ADDR_HIGH, SHELLCODE_ADDR_LOW + 0x28
-#define SHELLCODE_ADDRESS	SHELLCODE_ADDR_HIGH, SHELLCODE_ADDR_LOW + 0x38
+#define SHELLCODE_PAGE		SHELLCODE_ADDR_BASE
+#define SHELLCODE_DESTINATION	SHELLCODE_ADDR_BASE + 0x20
+#define SHELLCODE_PTR 		SHELLCODE_ADDR_BASE + 0x28
+#define SHELLCODE_ADDRESS	SHELLCODE_ADDR_BASE + 0x38
 
 #define PORT1_NUM_CONFIGS	100
 
