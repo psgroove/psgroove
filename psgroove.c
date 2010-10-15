@@ -104,6 +104,7 @@ void switch_port(int8_t port)
 }
 
 volatile uint8_t expire = 0; /* counts down every 10 milliseconds */
+volatile uint8_t expire_led = 0; /* counts down every 10 milliseconds */
 ISR(TIMER1_OVF_vect) 
 { 
 	uint16_t rate = (uint16_t) -(F_CPU / 64 / 100);
@@ -111,6 +112,11 @@ ISR(TIMER1_OVF_vect)
 	TCNT1L = rate & 0xff;
 	if (expire > 0)
 		expire--;
+	if (expire_led > 0) {
+          expire_led--;
+          if (expire_led == 0 && state != done)
+            LED (RED);
+        }
 }
 
 void SetupHardware(void)
@@ -230,12 +236,16 @@ int main(void)
 		// connect 1
 		if (state == hub_ready && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			connect_port(1);
 			state = p1_wait_reset;
 		}
 		
 		if (state == p1_wait_reset && last_port_reset_clear == 1)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(1);
 			state = p1_wait_enumerate;
 		}
@@ -243,6 +253,8 @@ int main(void)
 		// connect 2
 		if (state == p1_ready && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			connect_port(2);
 			state = p2_wait_reset;
@@ -250,6 +262,8 @@ int main(void)
 
 		if (state == p2_wait_reset && last_port_reset_clear == 2)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(2);
 			state = p2_wait_enumerate;
 		}
@@ -257,6 +271,8 @@ int main(void)
 		// connect 3
 		if (state == p2_ready && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			connect_port(3);
 			state = p3_wait_reset;
@@ -264,6 +280,8 @@ int main(void)
 
 		if (state == p3_wait_reset && last_port_reset_clear == 3)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(3);
 			state = p3_wait_enumerate;
 		}
@@ -271,6 +289,8 @@ int main(void)
 		// disconnect 2
 		if (state == p3_ready && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			disconnect_port(2);
 			state = p2_wait_disconnect;
@@ -278,6 +298,8 @@ int main(void)
 
 		if (state == p2_wait_disconnect && last_port_conn_clear == 2)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			state = p4_wait_connect;
 			expire = 15;
 		}
@@ -285,12 +307,16 @@ int main(void)
 		// connect 4
 		if (state == p4_wait_connect && expire == 0) 
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			connect_port(4);
 			state = p4_wait_reset;
 		}
 
 		if (state == p4_wait_reset && last_port_reset_clear == 4)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(4);
 			state = p4_wait_enumerate;
 		}
@@ -298,6 +324,8 @@ int main(void)
 		// connect 5
 		if (state == p4_ready && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			/* When first connecting port 5, we need to
 			   have the wrong data toggle for the PS3 to
@@ -309,6 +337,8 @@ int main(void)
 
 		if (state == p5_wait_reset && last_port_reset_clear == 5)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(5);
 			state = p5_wait_enumerate;
 		}
@@ -316,6 +346,8 @@ int main(void)
 		// disconnect 3
 		if (state == p5_responded && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			/* Need wrong data toggle again */
 			hub_int_force_data0 = 1;
@@ -325,6 +357,8 @@ int main(void)
 
 		if (state == p3_wait_disconnect && last_port_conn_clear == 3)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			state = p3_disconnected;
 			expire = 45;
 		}
@@ -332,6 +366,8 @@ int main(void)
 		// disconnect 5
 		if (state == p3_disconnected && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			disconnect_port(5);
 			state = p5_wait_disconnect;
@@ -339,6 +375,8 @@ int main(void)
 
 		if (state == p5_wait_disconnect && last_port_conn_clear == 5)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			state = p5_disconnected;
 			expire = 20;
 		}
@@ -346,6 +384,8 @@ int main(void)
 		// disconnect 4
 		if (state == p5_disconnected && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			disconnect_port(4);
 			state = p4_wait_disconnect;
@@ -353,6 +393,8 @@ int main(void)
 
 		if (state == p4_wait_disconnect && last_port_conn_clear == 4)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			state = p4_disconnected;
 			expire = 20;
 		}
@@ -360,6 +402,8 @@ int main(void)
 		// disconnect 1
 		if (state == p4_disconnected && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			disconnect_port(1);
 			state = p1_wait_disconnect;
