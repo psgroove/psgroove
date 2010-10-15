@@ -583,13 +583,11 @@ COFFCONVERT += --change-section-address .eeprom-0x810000
 
 
 coff: $(TARGET).elf
-	@echo
 	@echo $(MSG_COFF) $(TARGET).cof
 	@$(COFFCONVERT) -O coff-avr $< $(TARGET).cof
 
 
 extcoff: $(TARGET).elf
-	@echo
 	@echo $(MSG_EXTENDED_COFF) $(TARGET).cof
 	@$(COFFCONVERT) -O coff-ext-avr $< $(TARGET).cof
 
@@ -597,25 +595,21 @@ extcoff: $(TARGET).elf
 
 # Create final output files (.hex, .eep) from ELF output file.
 %.hex: %.elf
-	@echo
 	@echo $(MSG_FLASH) $@
 	@$(OBJCOPY) -O $(FORMAT) -R .eeprom -R .fuse -R .lock $< $@
 
 %.eep: %.elf
-	@echo
 	@echo $(MSG_EEPROM) $@
 	@-$(OBJCOPY) -j .eeprom --set-section-flags=.eeprom="alloc,load" \
 	--change-section-lma .eeprom=0 --no-change-warnings -O $(FORMAT) $< $@ || exit 0
 
 # Create extended listing file from ELF output file.
 %.lss: %.elf
-	@echo
 	@echo $(MSG_EXTENDED_LISTING) $@
 	@$(OBJDUMP) -h -S -z $< > $@
 
 # Create a symbol table from ELF output file.
 %.sym: %.elf
-	@echo
 	@echo $(MSG_SYMBOL_TABLE) $@
 	@$(NM) -n $< > $@
 
@@ -625,7 +619,6 @@ extcoff: $(TARGET).elf
 .SECONDARY : $(TARGET).a
 .PRECIOUS : $(OBJ)
 %.a: $(OBJ)
-	@echo
 	@echo $(MSG_CREATING_LIBRARY) $@
 	@$(AR) $@ $(OBJ)
 
@@ -634,21 +627,18 @@ extcoff: $(TARGET).elf
 .SECONDARY : $(TARGET).elf
 .PRECIOUS : $(OBJ)
 %.elf: $(OBJ)
-	@echo
 	@echo $(MSG_LINKING) $@
 	@$(CC) $(ALL_CFLAGS) $^ --output $@ $(LDFLAGS)
 
 
 # Compile: create object files from C source files.
 $(OBJDIR)/%.o : %.c
-	@echo
 	@echo $(MSG_COMPILING) $<
 	@$(CC) -c $(ALL_CFLAGS) $< -o $@ 
 
 
 # Compile: create object files from C++ source files.
 $(OBJDIR)/%.o : %.cpp
-	@echo
 	@echo $(MSG_COMPILING_CPP) $<
 	@$(CC) -c $(ALL_CPPFLAGS) $< -o $@ 
 
@@ -665,7 +655,6 @@ $(OBJDIR)/%.o : %.cpp
 
 # Assemble: create object files from assembler source files.
 $(OBJDIR)/%.o : %.S
-	@echo
 	@echo $(MSG_ASSEMBLING) $<
 	@$(CC) -c $(ALL_ASFLAGS) $< -o $@
 
@@ -679,7 +668,6 @@ $(OBJDIR)/%.o : %.S
 clean: begin clean_list clean_pl3 end
 
 clean_list :
-	@echo
 	@echo $(MSG_CLEANING)
 	@$(REMOVE) $(TARGET).hex
 	@$(REMOVE) $(TARGET).eep
