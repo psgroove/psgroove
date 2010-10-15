@@ -34,12 +34,13 @@ mkdir hex
 make clean
 
 for target in {0..5}; do
-  low_board=`echo ${board[$target]} | awk '{print tolower($0)}'`
-  filename="psgroove_${low_board}_${mcu[$target]}_${mhz_clock[$target]}mhz"
-  make TARGET=$filename MCU=${mcu[$target]} BOARD=${board[$target]} F_CLOCK=${mhz_clock[$target]}000000
-  mv *.hex hex
-  make clean_list TARGET=$filename MCU=${mcu[$target]} BOARD=${board[$target]} F_CLOCK=${mhz_clock[$target]}000000
+  for firmware in 3.01 3.10 3.15 3.41 ; do
+    firmware=${firmware/./_}
+    low_board=`echo ${board[$target]} | awk '{print tolower($0)}'`
+    filename="psgroove_${low_board}_${mcu[$target]}_${mhz_clock[$target]}mhz_firmware_${firmware}"
+    make TARGET=$filename MCU=${mcu[$target]} BOARD=${board[$target]} F_CPU=${mhz_clock[$target]}000000 FIRMWARE_VERSION=${firmware} || exit 1
+    mv *.hex hex
+    make clean_list TARGET=$filename
+  done
 done
 
-mv hex/*.hex .
-rm -rf hex/
