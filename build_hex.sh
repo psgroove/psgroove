@@ -41,8 +41,8 @@ board[$minimus32]=USBKEY
 mhz_clock[$minimus32]=16
 name[$minimus32]="Minimus 32"
 
-rm -rf hex/
-mkdir hex
+rm -rf psgroove_hex/
+mkdir psgroove_hex
 make clean
 
 for target in {0..5}; do
@@ -51,8 +51,8 @@ for target in {0..5}; do
     low_board=`echo ${board[$target]} | awk '{print tolower($0)}'`
     filename="psgroove_${low_board}_${mcu[$target]}_${mhz_clock[$target]}mhz_firmware_${firmware}"
     make TARGET=$filename MCU=${mcu[$target]} BOARD=${board[$target]} F_CPU=${mhz_clock[$target]}000000 FIRMWARE_VERSION=${firmware} || exit 1
-    mkdir -p "hex/${name[$target]}"
-    mv *.hex "hex/${name[$target]}/"
+    mkdir -p "psgroove_hex/${name[$target]}"
+    mv *.hex "psgroove_hex/${name[$target]}/"
     make clean_list TARGET=$filename
   done
 done
