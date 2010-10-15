@@ -3,4 +3,4 @@
 	url = git://github.com/psgroove/lufa-lib
 [submodule "PL3"]
 	path = PL3
-	url = git://github.com/jevinskie/PL3.git
+	url = git://github.com/kakaroto/PL3.git
