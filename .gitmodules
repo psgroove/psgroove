@@ -1,6 +1,6 @@
 [submodule "lufa-lib"]
 	path = lufa-lib
-	url = git://github.com/psgroove/lufa-lib
+	url = http://github.com/evilsperm/lufa-lib.git
 [submodule "PL3"]
 	path = PL3
 	url = git://github.com/kakaroto/PL3.git
