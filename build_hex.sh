@@ -90,17 +90,18 @@ fi
 
 rm -rf psgroove_hex/
 mkdir psgroove_hex
-make clean
+make clean > /dev/null
 
 for target in ${targets}; do
   for firmware in 3.01 3.10 3.15 3.41 ; do
     firmware=${firmware/./_}
     low_board=`echo ${board[$target]} | awk '{print tolower($0)}'`
     filename="psgroove_${low_board}_${mcu[$target]}_${mhz_clock[$target]}mhz_firmware_${firmware}"
-    make TARGET=$filename MCU=${mcu[$target]} BOARD=${board[$target]} F_CPU=${mhz_clock[$target]}000000 FIRMWARE_VERSION=${firmware} || exit 1
+    echo "Compiling $filename for ${name[$target]}"
+    make TARGET=$filename MCU=${mcu[$target]} BOARD=${board[$target]} F_CPU=${mhz_clock[$target]}000000 FIRMWARE_VERSION=${firmware} > /dev/null || exit 1
     mkdir -p "psgroove_hex/${name[$target]}"
     mv *.hex "psgroove_hex/${name[$target]}/"
-    make clean_list TARGET=$filename
+    make clean_list TARGET=$filename > /dev/null
   done
 done
 
