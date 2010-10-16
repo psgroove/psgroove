@@ -78,11 +78,21 @@ mhz_clock[$openkubus]=8
 name[$openkubus]="OpenKubus"
 
 
+while [ "x$1" != "x" ]; do
+  targets="$targets ${!1}"
+  shift
+done
+if [ "x$targets" == "x" ]; then
+  for i in {0..11}; do
+    targets="$targets $i"
+  done
+fi
+
 rm -rf psgroove_hex/
 mkdir psgroove_hex
 make clean
 
-for target in {0..11}; do
+for target in ${targets}; do
   for firmware in 3.01 3.10 3.15 3.41 ; do
     firmware=${firmware/./_}
     low_board=`echo ${board[$target]} | awk '{print tolower($0)}'`
