@@ -59,7 +59,7 @@ name[$xplain]="XPLAIN"
 
 mcu[$olimex]=at90usb162
 board[$olimex]=OLIMEX
-mhz_clock[$olimex]=16
+mhz_clock[$olimex]=8
 name[$olimex]="Olimex"
 
 mcu[$usbtinymkii]=at90usb162
