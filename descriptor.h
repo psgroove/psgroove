@@ -1,4 +1,6 @@
 
+#include "PL3/config.h"
+
 #include "PL3/shellcode_egghunt.h"
 
 
