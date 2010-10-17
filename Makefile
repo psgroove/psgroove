@@ -61,29 +61,6 @@
 
 FIRMWARE_VERSION = 3_41
 
-# MCU name
-#MCU = at90usb1287
-
-
-# Target board (see library "Board Types" documentation, NONE for projects not requiring
-# LUFA board drivers). If USER is selected, put custom board drivers in a directory called 
-# "Board" inside the application directory.
-#BOARD  = USBKEY
-
-
-# Processor frequency.
-#     This will define a symbol, F_CPU, in all source code files equal to the 
-#     processor frequency in Hz. You can then use this symbol in your source code to 
-#     calculate timings. Do NOT tack on a 'UL' at the end, this will be done
-#     automatically to create a 32-bit value in your source code.
-#
-#     This will be an integer division of F_CLOCK below, as it is sourced by
-#     F_CLOCK after it has run through any CPU prescalers. Note that this value
-#     does not *change* the processor frequency - it should merely be updated to
-#     reflect the processor speed set externally so that the code can use accurate
-#     software delays.
-#F_CPU = 8000000
-
 ## *** Select your board *** ##
 
 ## Teensy 1.0
@@ -735,7 +712,7 @@ $(OBJDIR)/%.o : %.S
 
 
 # Target: clean project.
-clean: begin clean_list clean_pl3 end
+clean: begin clean_list end
 
 clean_list :
 	@echo $(MSG_CLEANING)

@@ -4,13 +4,14 @@ PSGroove
 This is the PSGroove, an open-source reimplementation of the psjailbreak exploit for
 AT90USB and related microcontrollers.
 
-It should work on:
+It is known to work on:
 
 - AT90USB162
 - AT90USB646
 - AT90USB647
 - AT90USB1286
 - AT90USB1287
+- ATMEGA32U2
 - ATMEGA32U4
 
 ... and maybe more.
@@ -30,47 +31,25 @@ The repository uses the LUFA library as a submodule.  To clone, use something li
     git submodule init
     git submodule update
 
+If you don't have PPU-GCC installed, make might get confused and refuse to build. To fix this do something like:
+
+    cd PL3
+    make clean
+    git checkout .
+    cd ..
+
+Make should now work as expected and use the precompiled PL3 payloads.
 
 Configuring
 -----------
-Chip and board selection can usually be handled in the Makefile.
-In particular, update the MCU, BOARD, and F_CPU lines.  Suggested values:
 
-Teensy 1.0:
- 
-    MCU = at90usb162
-    BOARD = TEENSY
-    F_CLOCK = 16000000
+This version of PSGroove has been modified to directly use PL3 payloads instead of a single hardcoded Payload for much greater flexablity.
 
-Teensy++ 1.0:
- 
-    MCU = at90usb646
-    BOARD = TEENSY
-    F_CLOCK = 16000000
+Edit Makefile to reflect your firmware version (3_41, 3_01, 3_10 and 3_15 are currently supported) and board.
 
-Teensy 2.0:
+Alternately, you can just use the build_hex.sh to automatically build hex files for all supported boards and firmware versions.
 
-    MCU = atmega32u4
-    BOARD = TEENSY
-    F_CLOCK = 16000000
-
-Teensy++ 2.0:
- 
-    MCU = at90usb1286
-    BOARD = TEENSY
-    F_CLOCK = 16000000
-
-AT90USBKEY / AT90USBKEY2:
-
-    MCU = at90usb1287
-    BOARD = USBKEY
-    F_CLOCK = 8000000
-
-Minimus AVR USB:
-
-    MCU = at90usb162
-    BOARD = USBKEY
-    F_CLOCK = 16000000
+By default PSGroove is configured to use the dev PL3 payload which matches the peek/poke payload that PSGroove used to have. You can select another PL3 payload by changing the PAYLOAD define in descriptor.h 
 
 Board-specific notes
 --------------------
@@ -121,25 +100,3 @@ Notes
 A programmed dongle won't enumerate properly on a PC, so don't worry
 about that.
 
-This branch has a modified payload that adds peek and poke syscalls 
-to the lv2 kernel. A userspace application can use these syscalls to 
-dump out the entire memory space of the kernel, or patch the kernel
-as it is running.  
-
-Unfortunately, because the free toolchain/sdk is not ready, we can't
-distribute an application to do the dumping, so you will have to make
-your own.
-
-The lv2 kernel starts at 0x8000000000000000
-
-Peek
-----
- * Syscall 6.
- * r3 is a 64 bit address to read
- * A 64 bit value will be returned in r3
-
-Poke
-----
- * Syscall 7.
- * r4 is a 64 bit value
- * r3 is the address to write that value to
