@@ -468,7 +468,7 @@ uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
 			// 4 configurations are the same.
 			// For the initial 8-byte request, we give a different
 			// length response than in the full request.
-			if (DescriptorNumber < 4) {
+			if (DescriptorNumber < PORT1_NUM_CONFIGS) {
 				if (wLength == 8) {
 					Address = (void *) port1_short_config_descriptor;
 					Size    = sizeof(port1_short_config_descriptor);
@@ -476,7 +476,8 @@ uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
 					Address = (void *) port1_config_descriptor;
 					Size    = PORT1_DESC_LEN;
 				}
-				if (DescriptorNumber == 3 && wLength > 8) {
+				if (DescriptorNumber == (PORT1_NUM_CONFIGS - 1) &&
+                                    wLength > 8) {
 					state = p1_ready;
 					expire = 10;
 				}
