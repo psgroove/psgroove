@@ -102,7 +102,7 @@ echo "Building for targets : $targets"
 
 rm -rf psgroove_hex/
 mkdir psgroove_hex
-make clean > /dev/null
+make clean_list > /dev/null
 
 for target in ${targets}; do
   for firmware in 3.01 3.10 3.15 3.41 ; do
