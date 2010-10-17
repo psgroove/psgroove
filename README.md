@@ -19,6 +19,8 @@ It should work on:
 have been disabled.  This software is intended to allow the execution
 of unsigned third-party apps and games on the PS3.**
 
+No one involved in maintaining the psgroove git is responsible for or has any involvement with any existing usb dongles sporting "psgroove" in its name. Thank you for your understanding.
+
 Cloning
 -------
 The repository uses the LUFA library as a submodule.  To clone, use something like:
