@@ -32,11 +32,11 @@
 
 // Teensy board only has the first LED, so it will turn off when 
 // exploit succeeds.
-#define RED	(LEDS_LED1)
+#define RED		(LEDS_LED1)
 #define GREEN	(LEDS_LED2)
 #define BOTH	(RED|GREEN)
 #define NONE	(LEDS_NO_LEDS)
-#define LED(x) LEDs_SetAllLEDs(x)
+#define LED(x)	LEDs_SetAllLEDs(x)
 
 #define PORT_EMPTY 0x0100   /* powered only */
 #define PORT_FULL 0x0103    /* connected, enabled, powered, full-speed */
@@ -75,8 +75,6 @@ enum {
 	p4_disconnected,
 	p1_wait_disconnect,
 	p1_disconnected,
-	p6_wait_reset,
-	p6_wait_enumerate,
 	done,
 } state = init;
 
@@ -106,6 +104,7 @@ void switch_port(int8_t port)
 }
 
 volatile uint8_t expire = 0; /* counts down every 10 milliseconds */
+volatile uint8_t expire_led = 0; /* counts down every 10 milliseconds */
 ISR(TIMER1_OVF_vect) 
 { 
 	uint16_t rate = (uint16_t) -(F_CPU / 64 / 100);
@@ -113,6 +112,11 @@ ISR(TIMER1_OVF_vect)
 	TCNT1L = rate & 0xff;
 	if (expire > 0)
 		expire--;
+	if (expire_led > 0) {
+          expire_led--;
+          if (expire_led == 0 && state != done)
+            LED (RED);
+        }
 }
 
 void SetupHardware(void)
@@ -162,12 +166,6 @@ void HUB_Task(void)
 	}
 }
 
-const uint8_t PROGMEM jig_response[64] = {
-	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x78, 0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x88,
-	0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xe7, 0x20, 0xe8, 0x83, 0xff, 0xf0, 0xe8, 0x63, 0xff, 0xf8,
-	0xe8, 0xa3, 0x00, 0x18, 0x38, 0x63, 0x10, 0x00, 0x7c, 0x04, 0x28, 0x00, 0x40, 0x82, 0xff, 0xf4,
-	0x38, 0xc3, 0xf0, 0x20, 0x7c, 0xc9, 0x03, 0xa6, 0x4e, 0x80, 0x04, 0x20, 0x04, 0x00, 0x00, 0x00,
-};
 
 void JIG_Task(void)
 {
@@ -238,12 +236,16 @@ int main(void)
 		// connect 1
 		if (state == hub_ready && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			connect_port(1);
 			state = p1_wait_reset;
 		}
 		
 		if (state == p1_wait_reset && last_port_reset_clear == 1)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(1);
 			state = p1_wait_enumerate;
 		}
@@ -251,6 +253,8 @@ int main(void)
 		// connect 2
 		if (state == p1_ready && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			connect_port(2);
 			state = p2_wait_reset;
@@ -258,6 +262,8 @@ int main(void)
 
 		if (state == p2_wait_reset && last_port_reset_clear == 2)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(2);
 			state = p2_wait_enumerate;
 		}
@@ -265,6 +271,8 @@ int main(void)
 		// connect 3
 		if (state == p2_ready && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			connect_port(3);
 			state = p3_wait_reset;
@@ -272,6 +280,8 @@ int main(void)
 
 		if (state == p3_wait_reset && last_port_reset_clear == 3)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(3);
 			state = p3_wait_enumerate;
 		}
@@ -279,6 +289,8 @@ int main(void)
 		// disconnect 2
 		if (state == p3_ready && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			disconnect_port(2);
 			state = p2_wait_disconnect;
@@ -286,6 +298,8 @@ int main(void)
 
 		if (state == p2_wait_disconnect && last_port_conn_clear == 2)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			state = p4_wait_connect;
 			expire = 15;
 		}
@@ -293,12 +307,16 @@ int main(void)
 		// connect 4
 		if (state == p4_wait_connect && expire == 0) 
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			connect_port(4);
 			state = p4_wait_reset;
 		}
 
 		if (state == p4_wait_reset && last_port_reset_clear == 4)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(4);
 			state = p4_wait_enumerate;
 		}
@@ -306,6 +324,8 @@ int main(void)
 		// connect 5
 		if (state == p4_ready && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			/* When first connecting port 5, we need to
 			   have the wrong data toggle for the PS3 to
@@ -317,6 +337,8 @@ int main(void)
 
 		if (state == p5_wait_reset && last_port_reset_clear == 5)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(5);
 			state = p5_wait_enumerate;
 		}
@@ -324,6 +346,8 @@ int main(void)
 		// disconnect 3
 		if (state == p5_responded && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			/* Need wrong data toggle again */
 			hub_int_force_data0 = 1;
@@ -333,6 +357,8 @@ int main(void)
 
 		if (state == p3_wait_disconnect && last_port_conn_clear == 3)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			state = p3_disconnected;
 			expire = 45;
 		}
@@ -340,6 +366,8 @@ int main(void)
 		// disconnect 5
 		if (state == p3_disconnected && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			disconnect_port(5);
 			state = p5_wait_disconnect;
@@ -347,6 +375,8 @@ int main(void)
 
 		if (state == p5_wait_disconnect && last_port_conn_clear == 5)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			state = p5_disconnected;
 			expire = 20;
 		}
@@ -354,6 +384,8 @@ int main(void)
 		// disconnect 4
 		if (state == p5_disconnected && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			disconnect_port(4);
 			state = p4_wait_disconnect;
@@ -361,6 +393,8 @@ int main(void)
 
 		if (state == p4_wait_disconnect && last_port_conn_clear == 4)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			state = p4_disconnected;
 			expire = 20;
 		}
@@ -368,6 +402,8 @@ int main(void)
 		// disconnect 1
 		if (state == p4_disconnected && expire == 0)
 		{
+			LED(GREEN);
+                        expire_led = 10;
 			switch_port(0);
 			disconnect_port(1);
 			state = p1_wait_disconnect;
@@ -375,27 +411,7 @@ int main(void)
 
 		if (state == p1_wait_disconnect && last_port_conn_clear == 1)
 		{
-			state = p1_disconnected;
-			expire = 20;
-		}
-
-		// connect 6
-		if (state == p1_disconnected && expire == 0)
-		{
-			switch_port(0);
-			connect_port(6);
-			state = p6_wait_reset;
-		}
-
-		if (state == p6_wait_reset && last_port_reset_clear == 6)
-		{
-			switch_port(6);
-			state = p6_wait_enumerate;
-		}
-
-		// done
-		if (state == done)
-		{
+			state = done;
 			LED(GREEN);
 		}
 	}
@@ -440,10 +456,6 @@ uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
 			Address = (void *) port5_device_descriptor;
 			Size    = sizeof(port5_device_descriptor);
 			break;
-		case 6:
-			Address = (void *) port6_device_descriptor;
-			Size    = sizeof(port6_device_descriptor);
-			break;
 		}
 		break;
 	case DTYPE_Configuration: 
@@ -456,15 +468,16 @@ uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
 			// 4 configurations are the same.
 			// For the initial 8-byte request, we give a different
 			// length response than in the full request.
-			if (DescriptorNumber < 4) {
+			if (DescriptorNumber < PORT1_NUM_CONFIGS) {
 				if (wLength == 8) {
 					Address = (void *) port1_short_config_descriptor;
 					Size    = sizeof(port1_short_config_descriptor);
 				} else {
 					Address = (void *) port1_config_descriptor;
-					Size    = sizeof(port1_config_descriptor);
+					Size    = PORT1_DESC_LEN;
 				}
-				if (DescriptorNumber == 3 && wLength > 8) {
+				if (DescriptorNumber == (PORT1_NUM_CONFIGS - 1) &&
+                                    wLength > 8) {
 					state = p1_ready;
 					expire = 10;
 				}
@@ -513,11 +526,6 @@ uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
 			Address = (void *) port5_config_descriptor;
 			Size    = sizeof(port5_config_descriptor);
 			break;
-		case 6:
-			// 1 config
-			Address = (void *) port6_config_descriptor;
-			Size    = sizeof(port6_config_descriptor);
-			break;
 		}
 		break;
 	case 0x29: // HUB descriptor (always to port 0 we'll assume)
@@ -539,15 +547,6 @@ void EVENT_USB_Device_Disconnect(void) { }
 
 void EVENT_USB_Device_UnhandledControlRequest(void)
 {
-	if (port_cur == 6 && USB_ControlRequest.bRequest == 0xAA) {
-		/* holy crap, it worked! */
-		Endpoint_ClearSETUP();
-		Endpoint_ClearIN();
-		Endpoint_ClearStatusStage();
-		state = done;
-		return;
-	}		
-	
 	if (port_cur == 5 && USB_ControlRequest.bRequest == REQ_SetInterface)
 	{
 		/* can ignore this */

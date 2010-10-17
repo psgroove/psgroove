@@ -59,14 +59,17 @@
 #----------------------------------------------------------------------------
 
 
+FIRMWARE_VERSION = 3_41
+USE_JIG = 1
+
 # MCU name
-MCU = at90usb1286
+#MCU = at90usb1287
 
 
 # Target board (see library "Board Types" documentation, NONE for projects not requiring
 # LUFA board drivers). If USER is selected, put custom board drivers in a directory called 
 # "Board" inside the application directory.
-BOARD  = TEENSY
+#BOARD  = USBKEY
 
 
 # Processor frequency.
@@ -80,7 +83,81 @@ BOARD  = TEENSY
 #     does not *change* the processor frequency - it should merely be updated to
 #     reflect the processor speed set externally so that the code can use accurate
 #     software delays.
-F_CPU = 16000000
+#F_CPU = 8000000
+
+## *** Select your board *** ##
+
+## Teensy 1.0
+#MCU = at90usb162
+#BOARD = TEENSY
+#F_CPU = 16000000
+
+## Teensy++ 1.0
+#MCU = at90usb646
+#BOARD = TEENSY
+#F_CPU = 16000000
+
+## Teensy 2.0
+#MCU = atmega32u4
+#BOARD = TEENSY
+#F_CPU = 16000000
+
+# Teensy++ 2.0
+#MCU = at90usb1286
+#BOARD  = TEENSY
+#F_CPU = 16000000
+
+## AT90USBKEY / AT90USBKEY2
+#MCU = at90usb1287
+#BOARD = USBKEY
+#F_CPU = 8000000
+
+## Minimus v1
+#MCU = at90usb162
+#BOARD = MINUMUS
+#F_CPU = 16000000
+
+## Minimus 32
+## It actually is atmega32u2 but at90usb162 is compatible and
+## the latest avr-gcc doesn't compile for atmega32u2
+#MCU = at90usb162
+#BOARD = MINIMUS
+#F_CPU = 16000000
+
+## Maximus
+#MCU = at90usb162
+#BOARD = MAXIMUS
+#F_CPU = 16000000
+
+## Blackcat
+#MCU = at90usb162
+#BOARD = BLACKCAT
+#F_CPU = 16000000
+
+## Xplain
+#MCU = at90usb1287
+#BOARD = XPLAIN
+#F_CPU = 8000000
+
+## Olimex
+#MCU = at90usb162
+#BOARD = OLIMEX
+#F_CPU = 8000000
+
+## USBTINYMKII
+#MCU = at90usb162
+#BOARD = USBTINYMKII
+#F_CPU = 16000000
+
+## Benito
+#MCU = at90usb162
+#BOARD = BENITO
+#F_CPU = 16000000
+
+## OpenKubus
+#MCU = atmega16u4
+#BOARD = USBKEY
+#F_CPU = 8000000
 
 
 # Input clock frequency.
@@ -109,6 +186,7 @@ TARGET = psgroove
 #     To put object files in current directory, use a dot (.), do NOT make
 #     this an empty or blank macro!
 OBJDIR = .
+
 
 
 # Path to the LUFA library
@@ -178,6 +256,10 @@ CSTANDARD = -std=c99
 CDEFS  = -DF_CPU=$(F_CPU)UL
 CDEFS += -DF_CLOCK=$(F_CLOCK)UL
 CDEFS += -DBOARD=BOARD_$(BOARD)
+CDEFS += -DFIRMWARE_$(FIRMWARE_VERSION)
+#if USE_JIG
+CDEFS += -DUSE_JIG
+#endif
 CDEFS += $(LUFA_OPTS)
 
 
@@ -575,41 +657,35 @@ COFFCONVERT += --change-section-address .eeprom-0x810000
 
 
 coff: $(TARGET).elf
-	@echo
 	@echo $(MSG_COFF) $(TARGET).cof
-	$(COFFCONVERT) -O coff-avr $< $(TARGET).cof
+	@$(COFFCONVERT) -O coff-avr $< $(TARGET).cof
 
 
 extcoff: $(TARGET).elf
-	@echo
 	@echo $(MSG_EXTENDED_COFF) $(TARGET).cof
-	$(COFFCONVERT) -O coff-ext-avr $< $(TARGET).cof
+	@$(COFFCONVERT) -O coff-ext-avr $< $(TARGET).cof
 
 
 
 # Create final output files (.hex, .eep) from ELF output file.
 %.hex: %.elf
-	@echo
 	@echo $(MSG_FLASH) $@
-	$(OBJCOPY) -O $(FORMAT) -R .eeprom -R .fuse -R .lock $< $@
+	@$(OBJCOPY) -O $(FORMAT) -R .eeprom -R .fuse -R .lock $< $@
 
 %.eep: %.elf
-	@echo
 	@echo $(MSG_EEPROM) $@
-	-$(OBJCOPY) -j .eeprom --set-section-flags=.eeprom="alloc,load" \
+	@-$(OBJCOPY) -j .eeprom --set-section-flags=.eeprom="alloc,load" \
 	--change-section-lma .eeprom=0 --no-change-warnings -O $(FORMAT) $< $@ || exit 0
 
 # Create extended listing file from ELF output file.
 %.lss: %.elf
-	@echo
 	@echo $(MSG_EXTENDED_LISTING) $@
-	$(OBJDUMP) -h -S -z $< > $@
+	@$(OBJDUMP) -h -S -z $< > $@
 
 # Create a symbol table from ELF output file.
 %.sym: %.elf
-	@echo
 	@echo $(MSG_SYMBOL_TABLE) $@
-	$(NM) -n $< > $@
+	@$(NM) -n $< > $@
 
 
 
@@ -617,75 +693,72 @@ extcoff: $(TARGET).elf
 .SECONDARY : $(TARGET).a
 .PRECIOUS : $(OBJ)
 %.a: $(OBJ)
-	@echo
 	@echo $(MSG_CREATING_LIBRARY) $@
-	$(AR) $@ $(OBJ)
+	@$(AR) $@ $(OBJ)
 
 
 # Link: create ELF output file from object files.
 .SECONDARY : $(TARGET).elf
 .PRECIOUS : $(OBJ)
 %.elf: $(OBJ)
-	@echo
 	@echo $(MSG_LINKING) $@
-	$(CC) $(ALL_CFLAGS) $^ --output $@ $(LDFLAGS)
+	@$(CC) $(ALL_CFLAGS) $^ --output $@ $(LDFLAGS)
 
 
 # Compile: create object files from C source files.
 $(OBJDIR)/%.o : %.c
-	@echo
 	@echo $(MSG_COMPILING) $<
-	$(CC) -c $(ALL_CFLAGS) $< -o $@ 
+	@$(CC) -c $(ALL_CFLAGS) $< -o $@ 
 
 
 # Compile: create object files from C++ source files.
 $(OBJDIR)/%.o : %.cpp
-	@echo
 	@echo $(MSG_COMPILING_CPP) $<
-	$(CC) -c $(ALL_CPPFLAGS) $< -o $@ 
+	@$(CC) -c $(ALL_CPPFLAGS) $< -o $@ 
 
 
 # Compile: create assembler files from C source files.
 %.s : %.c
-	$(CC) -S $(ALL_CFLAGS) $< -o $@
+	@$(CC) -S $(ALL_CFLAGS) $< -o $@
 
 
 # Compile: create assembler files from C++ source files.
 %.s : %.cpp
-	$(CC) -S $(ALL_CPPFLAGS) $< -o $@
+	@$(CC) -S $(ALL_CPPFLAGS) $< -o $@
 
 
 # Assemble: create object files from assembler source files.
 $(OBJDIR)/%.o : %.S
-	@echo
 	@echo $(MSG_ASSEMBLING) $<
-	$(CC) -c $(ALL_ASFLAGS) $< -o $@
+	@$(CC) -c $(ALL_ASFLAGS) $< -o $@
 
 
 # Create preprocessed source for use in sending a bug report.
 %.i : %.c
-	$(CC) -E -mmcu=$(MCU) -I. $(CFLAGS) $< -o $@ 
+	@$(CC) -E -mmcu=$(MCU) -I. $(CFLAGS) $< -o $@ 
 
 
 # Target: clean project.
-clean: begin clean_list end
+clean: begin clean_list clean_pl3 end
 
 clean_list :
-	@echo
 	@echo $(MSG_CLEANING)
-	$(REMOVE) $(TARGET).hex
-	$(REMOVE) $(TARGET).eep
-	$(REMOVE) $(TARGET).cof
-	$(REMOVE) $(TARGET).elf
-	$(REMOVE) $(TARGET).map
-	$(REMOVE) $(TARGET).sym
-	$(REMOVE) $(TARGET).lss
-	$(REMOVE) $(SRC:%.c=$(OBJDIR)/%.o)
-	$(REMOVE) $(SRC:%.c=$(OBJDIR)/%.lst)
-	$(REMOVE) $(SRC:.c=.s)
-	$(REMOVE) $(SRC:.c=.d)
-	$(REMOVE) $(SRC:.c=.i)
-	$(REMOVEDIR) .dep
+	@$(REMOVE) $(TARGET).hex
+	@$(REMOVE) $(TARGET).eep
+	@$(REMOVE) $(TARGET).cof
+	@$(REMOVE) $(TARGET).elf
+	@$(REMOVE) $(TARGET).map
+	@$(REMOVE) $(TARGET).sym
+	@$(REMOVE) $(TARGET).lss
+	@$(REMOVE) $(SRC:%.c=$(OBJDIR)/%.o)
+	@$(REMOVE) $(SRC:%.c=$(OBJDIR)/%.lst)
+	@$(REMOVE) $(SRC:.c=.s)
+	@$(REMOVE) $(SRC:.c=.d)
+	@$(REMOVE) $(SRC:.c=.i)
+	@$(REMOVEDIR) .dep
+
+clean_pl3:
+	@$(MAKE) -C PL3/ clean
 
 doxygen:
 	@echo Generating Project Documentation...
@@ -703,8 +776,16 @@ $(shell mkdir $(OBJDIR) 2>/dev/null)
 -include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 
 
+PL3:
+	$(MAKE) -C PL3
+
+# Explicitly lay out these payload dependencies so that PL3 can be built first
+descriptor.h: PL3
+psgroove.c: descriptor.h
+
+
 # Listing of phony targets.
 .PHONY : all begin finish end sizebefore sizeafter gccversion \
 build elf hex eep lss sym coff extcoff doxygen clean          \
 clean_list clean_doxygen program dfu flip flip-ee dfu-ee      \
-debug gdb-config
+debug gdb-config PL3
