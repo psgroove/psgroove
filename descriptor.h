@@ -21,25 +21,20 @@
 #define default_shellcode shellcode_egghunt
 #define default_shellcode_macro shellcode_egghunt_macro
 
+#define PAYLOAD_FW_DEPENDENT
+#define PAYLOAD default_payload
+
 #if defined (FIRMWARE_3_41)
-#include "PL3/default_payload_3_41.h"
-#define default_payload default_payload_3_41
-#define default_payload_macro default_payload_3_41_macro
+#define FIRMWARE 3_41
 #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x70
 #elif defined (FIRMWARE_3_15)
-#include "PL3/default_payload_3_15.h"
-#define default_payload default_payload_3_15
-#define default_payload_macro default_payload_3_15_macro
+#define FIRMWARE 3_15
 #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x30
 #elif defined (FIRMWARE_3_10)
-#include "PL3/default_payload_3_10.h"
-#define default_payload default_payload_3_10
-#define default_payload_macro default_payload_3_10_macro
+#define FIRMWARE 3_10
 #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x30
 #elif defined (FIRMWARE_3_01)
-#include "PL3/default_payload_3_01.h"
-#define default_payload default_payload_3_01
-#define default_payload_macro default_payload_3_01_macro
+#define FIRMWARE 3_01
 #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3B, 0xFB, 0xC8
 #endif /* FIRMWARE_X_YZ */
 
@@ -52,12 +47,10 @@
 #define PORT1_NUM_CONFIGS	4
 
 #else /* USE_JIG */
-
-#include "PL3/dump_lv2.h"
 #define default_shellcode shellcode_egghunt
 #define default_shellcode_macro shellcode_egghunt_macro
-#define default_payload dump_lv2
-#define default_payload_macro dump_lv2_macro
+
+#define PAYLOAD dump_lv2
 
 #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x4E, 0x00, 0x00
 
@@ -69,6 +62,31 @@
 #define PORT1_NUM_CONFIGS	100
 
 #endif /* USE_JIG */
+
+
+#ifdef PAYLOAD_FW_DEPENDENT
+
+# define PAYLOAD_INCLUDE_(payload, firmware) <PL3/payload##_##firmware.h>
+# define PAYLOAD_INCLUDE(payload, firmware) PAYLOAD_INCLUDE_(payload, firmware)
+# define default_payload_macro__(payload, firmware) payload##_##firmware##_macro
+# define default_payload_macro_(payload, firmware) \
+  default_payload_macro__(payload, firmware)
+
+# include PAYLOAD_INCLUDE(PAYLOAD, FIRMWARE)
+# define default_payload_macro default_payload_macro_(PAYLOAD, FIRMWARE)
+
+#else
+
+# define PAYLOAD_INCLUDE_(payload) <PL3/payload.h>
+# define PAYLOAD_INCLUDE(payload) PAYLOAD_INCLUDE_(payload)
+# define default_payload_macro__(payload) payload##_macro
+# define default_payload_macro_(payload) default_payload_macro__(payload)
+
+# include PAYLOAD_INCLUDE(PAYLOAD)
+# define default_payload_macro default_payload_macro_(PAYLOAD)
+
+#endif
+
 
 #define PORT1_DESC_LEN		0xf00
 #define PORT1_DESC_LEN_HI	((PORT1_DESC_LEN >> 8) & 0xFF)
