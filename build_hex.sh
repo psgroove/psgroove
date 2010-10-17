@@ -1,3 +1,11 @@
+#!/bin/sh
+#
+# Copyright (C) Youness Alaoui (KaKaRoTo)
+#
+# This software is distributed under the terms of the GNU General Public
+# License ("GPL") version 3, as published by the Free Software Foundation.
+#
+
 all_targets="teensy1 teensypp1 teensy2 teensypp2 \
               at90usbkey minimus1 minimus32 maximus \
               blackcat xplain olimex usbtinymkii \
