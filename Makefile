@@ -124,6 +124,11 @@ USE_JIG = 1
 #BOARD = MINIMUS
 #F_CPU = 16000000
 
+## Maximus
+#MCU = at90usb162
+#BOARD = MAXIMUS
+#F_CPU = 16000000
+
 ## Blackcat
 #MCU = at90usb162
 #BOARD = BLACKCAT

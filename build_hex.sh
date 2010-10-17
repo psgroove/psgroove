@@ -1,6 +1,7 @@
 all_targets="teensy1 teensypp1 teensy2 teensypp2 \
-              at90usbkey minimus1 minimus32 blackcat xplain \
-              olimex usbtinymkii bentio openkubus"
+              at90usbkey minimus1 minimus32 maximus \
+              blackcat xplain olimex usbtinymkii \
+              bentio openkubus"
 
 i=0
 for target in ${all_targets}; do
@@ -43,6 +44,10 @@ board[$minimus32]=MINIMUS
 mhz_clock[$minimus32]=16
 name[$minimus32]="Minimus 32"
 
+mcu[$maximus]=at90usb162
+board[$maximus]=MAXIMUS
+mhz_clock[$maximus]=16
+name[$maximus]="Maximus"
 
 mcu[$blackcat]=at90usb162
 board[$blackcat]=BLACKCAT
