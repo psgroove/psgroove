@@ -22,7 +22,7 @@
 #define default_shellcode_macro shellcode_egghunt_macro
 
 #define PAYLOAD_FW_DEPENDENT
-#define PAYLOAD default_payload
+#define PAYLOAD payload_dev
 
 #if defined (FIRMWARE_3_41)
 #define FIRMWARE 3_41
