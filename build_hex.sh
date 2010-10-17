@@ -19,7 +19,7 @@ else
   all_targets="${all_targets} openkubus"
 fi
 
-i=0
+i=1
 for target in ${all_targets}; do
   let ${target}=$i
   let i++
