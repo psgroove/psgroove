@@ -1,5 +1,5 @@
 all_targets="teensy1 teensypp1 teensy2 teensypp2 \
-              at90usbkey minimus1 blackcat xplain \
+              at90usbkey minimus1 minimus32 blackcat xplain \
               olimex usbtinymkii bentio openkubus"
 
 i=0
@@ -38,10 +38,10 @@ board[$minimus1]=MINIMUS
 mhz_clock[$minimus1]=16
 name[$minimus1]="Minimus v1"
 
-#mcu[$minimus32]=atmega32u2
-#board[$minimus32]=MINIMUS
-#mhz_clock[$minimus32]=16
-#name[$minimus32]="Minimus 32"
+mcu[$minimus32]=at90usb162
+board[$minimus32]=MINIMUS
+mhz_clock[$minimus32]=16
+name[$minimus32]="Minimus 32"
 
 
 mcu[$blackcat]=at90usb162

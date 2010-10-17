@@ -117,8 +117,10 @@ USE_JIG = 1
 #BOARD = MINUMUS
 #F_CPU = 16000000
 
-## Minimus 32 (MCU not currently supported by avr-gcc)
-#MCU = atmega32u2
+## Minimus 32
+## It actually is atmega32u2 but at90usb162 is compatible and
+## the latest avr-gcc doesn't compile for atmega32u2
+#MCU = at90usb162
 #BOARD = MINIMUS
 #F_CPU = 16000000
 
