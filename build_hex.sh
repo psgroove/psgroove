@@ -38,12 +38,12 @@ mhz_clock[$at90usbkey]=8
 name[$at90usbkey]="AT90USBKEY"
 
 mcu[$minimus1]=at90usb162
-board[$minimus1]=USBKEY
+board[$minimus1]=MINIMUS
 mhz_clock[$minimus1]=16
 name[$minimus1]="Minimus v1"
 
 mcu[$minimus32]=atmega32u2
-board[$minimus32]=USBKEY
+board[$minimus32]=MINIMUS
 mhz_clock[$minimus32]=16
 name[$minimus32]="Minimus 32"
 

@@ -119,7 +119,7 @@ USE_JIG = 1
 
 ## Minimus 32 (MCU not currently supported by avr-gcc)
 #MCU = atmega32u2
-#BOARD = USBKEY
+#BOARD = MINIMUS
 #F_CPU = 16000000
 
 ## Blackcat
