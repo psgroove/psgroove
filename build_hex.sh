@@ -1,16 +1,12 @@
-teensy1=0
-teensypp1=1
-teensy2=2
-teensypp2=3
-at90usbkey=4
-minimus1=5
-minimus32=100
-blackcat=6
-xplain=7
-olimex=8
-usbtinymkii=9
-bentio=10
-openkubus=11
+all_targets="teensy1 teensypp1 teensy2 teensypp2 \
+              at90usbkey minimus1 blackcat xplain \
+              olimex usbtinymkii bentio openkubus"
+
+i=0
+for target in ${all_targets}; do
+  let ${target}=$i
+  let i++
+done
 
 mcu[$teensy1]=at90usb162
 board[$teensy1]=TEENSY
@@ -42,10 +38,11 @@ board[$minimus1]=MINIMUS
 mhz_clock[$minimus1]=16
 name[$minimus1]="Minimus v1"
 
-mcu[$minimus32]=atmega32u2
-board[$minimus32]=MINIMUS
-mhz_clock[$minimus32]=16
-name[$minimus32]="Minimus 32"
+#mcu[$minimus32]=atmega32u2
+#board[$minimus32]=MINIMUS
+#mhz_clock[$minimus32]=16
+#name[$minimus32]="Minimus 32"
+
 
 mcu[$blackcat]=at90usb162
 board[$blackcat]=BLACKCAT
@@ -79,14 +76,16 @@ name[$openkubus]="OpenKubus"
 
 
 while [ "x$1" != "x" ]; do
-  targets="$targets ${!1}"
+  targets="$targets ${1}"
   shift
 done
 if [ "x$targets" == "x" ]; then
-  for i in {0..11}; do
-    targets="$targets $i"
+  for i in ${all_targets}; do
+    targets="$targets ${i}"
   done
 fi
+
+echo "Building for targets : $targets"
 
 rm -rf psgroove_hex/
 mkdir psgroove_hex
@@ -95,12 +94,12 @@ make clean > /dev/null
 for target in ${targets}; do
   for firmware in 3.01 3.10 3.15 3.41 ; do
     firmware=${firmware/./_}
-    low_board=`echo ${board[$target]} | awk '{print tolower($0)}'`
-    filename="psgroove_${low_board}_${mcu[$target]}_${mhz_clock[$target]}mhz_firmware_${firmware}"
-    echo "Compiling $filename for ${name[$target]}"
-    make TARGET=$filename MCU=${mcu[$target]} BOARD=${board[$target]} F_CPU=${mhz_clock[$target]}000000 FIRMWARE_VERSION=${firmware} > /dev/null || exit 1
-    mkdir -p "psgroove_hex/${name[$target]}"
-    mv *.hex "psgroove_hex/${name[$target]}/"
+    low_board=`echo ${board[${!target}]} | awk '{print tolower($0)}'`
+    filename="psgroove_${low_board}_${mcu[${!target}]}_${mhz_clock[${!target}]}mhz_firmware_${firmware}"
+    echo "Compiling $filename for ${name[${!target}]}"
+    make TARGET=$filename MCU=${mcu[${!target}]} BOARD=${board[${!target}]} F_CPU=${mhz_clock[${!target}]}000000 FIRMWARE_VERSION=${firmware} > /dev/null || exit 1
+    mkdir -p "psgroove_hex/${name[${!target}]}"
+    mv *.hex "psgroove_hex/${name[${!target}]}/"
     make clean_list TARGET=$filename > /dev/null
   done
 done
