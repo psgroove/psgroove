@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) Youness Alaoui (KaKaRoTo)
 #
@@ -24,6 +24,12 @@ for target in ${all_targets}; do
   let ${target}=$i
   let i++
 done
+
+if command -v gmake &>/dev/null; then
+	MAKE=gmake
+else
+	MAKE=make
+fi
 
 mcu[$teensy1]=at90usb162
 board[$teensy1]=TEENSY
@@ -110,7 +116,7 @@ echo "Building for targets : $targets"
 
 rm -rf psgroove_hex/
 mkdir psgroove_hex
-make clean_list > /dev/null
+$MAKE clean_list > /dev/null
 
 for target in ${targets}; do
   for firmware in 3.01 3.10 3.15 3.41 ; do
@@ -118,10 +124,10 @@ for target in ${targets}; do
     low_board=`echo ${board[${!target}]} | awk '{print tolower($0)}'`
     filename="psgroove_${low_board}_${mcu[${!target}]}_${mhz_clock[${!target}]}mhz_firmware_${firmware}"
     echo "Compiling $filename for ${name[${!target}]}"
-    make TARGET=$filename MCU=${mcu[${!target}]} BOARD=${board[${!target}]} F_CPU=${mhz_clock[${!target}]}000000 FIRMWARE_VERSION=${firmware} > /dev/null || exit 1
+    $MAKE TARGET=$filename MCU=${mcu[${!target}]} BOARD=${board[${!target}]} F_CPU=${mhz_clock[${!target}]}000000 FIRMWARE_VERSION=${firmware} > /dev/null || exit 1
     mkdir -p "psgroove_hex/${name[${!target}]}"
     mv *.hex "psgroove_hex/${name[${!target}]}/"
-    make clean_list TARGET=$filename > /dev/null
+    $MAKE clean_list TARGET=$filename > /dev/null
   done
 done
 
