@@ -176,6 +176,7 @@ const uint8_t PROGMEM port1_device_descriptor[] = {
 
 const uint8_t PROGMEM port1_short_config_descriptor[] = {
 	0x09, 0x02, PORT1_DESC_LEN_LO, PORT1_DESC_LEN_HI, 0x01, 0x00, 0x00, 0x80,
+	0xfa,
 };
 
 const uint8_t PROGMEM port1_config_descriptor[] = {
