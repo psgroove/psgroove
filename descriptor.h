@@ -131,7 +131,7 @@
 #endif
 
 
-#define PORT1_DESC_LEN		0xf00
+#define PORT1_DESC_LEN		0x1000
 #define PORT1_DESC_LEN_HI	((PORT1_DESC_LEN >> 8) & 0xFF)
 #define PORT1_DESC_LEN_LO	(PORT1_DESC_LEN & 0xFF)
 
