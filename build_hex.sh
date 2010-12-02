@@ -10,6 +10,7 @@ all_targets="teensy1 teensypp1 teensy2 teensypp2 \
               at90usbkey minimus1 minimus32 maximus \
               blackcat xplain olimex usbtinymkii \
               bentio"
+supported_firmwares="3.41 3.41_KIOSK 3.40 3.30 3.21 3.15 3.10 3.01 2.76"
 
 avr_gcc_ver=`avr-gcc --version | head -n 1 | awk '{print $3}'`
 if [[ $avr_gcc_ver < "4.3.5" ]]; then
@@ -119,7 +120,7 @@ mkdir psgroove_hex
 $MAKE clean_list > /dev/null
 
 for target in ${targets}; do
-  for firmware in 3.01 3.10 3.15 3.41 ; do
+  for firmware in ${supported_firmwares}; do
     firmware=${firmware/./_}
     low_board=`echo ${board[${!target}]} | awk '{print tolower($0)}'`
     filename="psgroove_${low_board}_${mcu[${!target}]}_${mhz_clock[${!target}]}mhz_firmware_${firmware}"
